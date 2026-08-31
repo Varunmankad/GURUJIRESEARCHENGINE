@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GURUJI — मास्टर नक्षत्र रिसर्च सॉफ़्टवेयर 2026–2030</title>
+<style>
+:root{--bg:#090a0f;--panel:#141822;--gold:#d4af37;--silver:#b3b9c1;--crude:#e67e22;--border:#242b35}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font-family:"Segoe UI",Arial,sans-serif}
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#050608,#141822)}
+.login-box{background:var(--panel);border:2px solid var(--gold);padding:40px;border-radius:12px;width:350px;text-align:center;box-shadow:0 0 20px #d4af3733}
+.login-box input{width:100%;padding:12px;margin:10px 0;background:var(--bg);border:1px solid var(--border);color:#fff;border-radius:6px}
+.login-box button{width:100%;padding:12px;background:var(--gold);border:0;color:#000;font-weight:bold;border-radius:6px;cursor:pointer;margin-top:15px}
+#main-dashboard{display:none;padding:20px;max-width:1500px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--border);padding-bottom:15px;margin-bottom:20px;gap:15px}
+header h1{color:var(--gold);font-size:25px;margin:0}.tabs{display:flex;gap:15px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{padding:12px 25px;background:var(--panel);border:1px solid var(--border);color:white;cursor:pointer;font-weight:bold;border-radius:6px}
+.tab-btn.active[data-asset=gold]{border-color:var(--gold);color:var(--gold)}.tab-btn.active[data-asset=silver]{border-color:var(--silver);color:var(--silver)}.tab-btn.active[data-asset=crude]{border-color:var(--crude);color:var(--crude)}
+.search-engine{background:var(--panel);padding:15px;border-radius:8px;border:1px solid var(--border);margin-bottom:20px;display:flex;gap:15px;align-items:center;flex-wrap:wrap}
+.search-engine input{padding:10px;background:var(--bg);border:1px solid var(--border);color:white;border-radius:6px;font-size:16px}
+.search-engine button{padding:10px 20px;background:var(--gold);border:0;color:#000;font-weight:bold;border-radius:6px;cursor:pointer}
+.alert-box{background:#1b1611;border-left:4px solid var(--crude);padding:15px;margin-bottom:20px;border-radius:4px;font-size:15px;line-height:1.6}
+.grid-layout{display:grid;grid-template-columns:280px 1fr;gap:20px}.sidebar-list,.content-area{background:var(--panel);border:1px solid var(--border);border-radius:8px}
+.sidebar-list{height:65vh;overflow-y:auto;padding:10px}.content-area{padding:20px;height:65vh;overflow-y:auto}
+.sidebar-title{color:var(--gold);font-weight:bold;padding:10px}.sidebar-item{padding:10px;border-bottom:1px solid var(--border);cursor:pointer;font-size:14px}
+.sidebar-item:hover,.sidebar-item.active{background:var(--bg);color:var(--gold)}
+.data-table{width:100%;border-collapse:collapse;margin-top:15px}.data-table th,.data-table td{border:1px solid var(--border);padding:10px;text-align:left}.data-table th{background:var(--bg);color:var(--gold)}
+.card-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:15px 0}.card{background:#10141c;border:1px solid var(--border);padding:15px;border-radius:8px}.card small{color:var(--silver);display:block}.card b{font-size:20px}
+@media(max-width:850px){.grid-layout{grid-template-columns:1fr}.sidebar-list,.content-area{height:auto;max-height:60vh}.card-grid{grid-template-columns:repeat(2,1fr)}header{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div id="login-screen">
+<div class="login-box">
+<h2 style="color:var(--gold)">GURUJI RESEARCH ENGINE</h2>
+<p style="color:var(--silver);font-size:12px">100% ऑफ़लाइन मास्टर प्रणाली · 2026–2030</p>
+<input id="username" type="text" placeholder="लॉगिन आईडी (Admin)">
+<input id="password" type="password" placeholder="पासवर्ड">
+<button onclick="validateLogin()">सिस्टम सक्रिय करें</button>
+<p id="login-error" style="color:red"></p>
+</div></div>
+
+<div id="main-dashboard">
+<header>
+<h1>🪐 45-मॉड्यूल नक्षत्र समय-सारणी इंजन (2026–2030)</h1>
+<div style="color:var(--silver);font-weight:bold;background:#1b202e;padding:6px 15px;border-radius:20px;font-size:13px">🔒 5-वर्षीय JPL कोर डेटाबेस</div>
+</header>
+
+<div class="tabs">
+<button class="tab-btn active" data-asset="gold" onclick="switchAsset('gold')">GOLD FUTURES (GC)</button>
+<button class="tab-btn" data-asset="silver" onclick="switchAsset('silver')">SILVER FUTURES (SI)</button>
+<button class="tab-btn" data-asset="crude" onclick="switchAsset('crude')">CRUDE OIL (CL)</button>
+</div>
+
+<div class="search-engine">
+<label><strong>कैलेंडर से तारीख चुनें (2026–2030):</strong></label>
+<input type="date" id="search-date" min="2026-01-01" max="2030-12-31" value="2026-08-31">
+<button onclick="queryDateRecord()">Get Day Record</button>
+</div>
+
+<div class="alert-box" id="btst-alert-zone">🔮 <b>सत्र अलर्ट:</b> तारीख चुनकर रिकॉर्ड निकालें।</div>
+
+<div class="grid-layout">
+<div class="sidebar-list" id="module-sidebar"></div>
+<div class="content-area" id="analytics-display">
+<h3 style="color:var(--gold)">अनुसंधान इंजन रेंडरिंग एरिया</h3>
+<p>कैलेंडर से तारीख चुनें या बाएँ नक्षत्र पर क्लिक करें।</p>
+</div>
+</div>
+</div>
+
+<script src="database.js"></script>
+<script>
+"use strict";
+
+const FALLBACK_DATABASE = [
+{date:"2026-01-01",time:"05:30",ny:"19:00",tz:"EST",nak:"Mrigashira",state:"उदय (Rise)",deg:66.3462},
+{date:"2026-01-01",time:"11:30",ny:"01:00",tz:"EST",nak:"Ardra",state:"उदय (Rise)",deg:70.0973},
+{date:"2026-01-01",time:"17:30",ny:"07:00",tz:"EST",nak:"Ardra",state:"उदय (Rise)",deg:73.8554},
+{date:"2026-01-01",time:"23:30",ny:"13:00",tz:"EST",nak:"Ardra",state:"उदय (Rise)",deg:77.6182},
+{date:"2026-08-31",time:"05:30",ny:"20:00",tz:"EDT",nak:"Ashwini",state:"उदय (Rise)",deg:11.4982},
+{date:"2026-08-31",time:"11:30",ny:"02:00",tz:"EDT",nak:"Bharani",state:"उदय (Rise)",deg:14.8653},
+{date:"2026-08-31",time:"17:30",ny:"08:00",tz:"EDT",nak:"Bharani",state:"उदय (Rise)",deg:18.246},
+{date:"2026-08-31",time:"23:30",ny:"14:00",tz:"EDT",nak:"Bharani",state:"उदय (Rise)",deg:21.64},
+{date:"2027-01-01",time:"05:30",ny:"19:00",tz:"EST",nak:"Vishakha",state:"उदय (Rise)",deg:204.2355},
+{date:"2027-01-01",time:"11:30",ny:"01:00",tz:"EST",nak:"Vishakha",state:"उदय (Rise)",deg:207.3902},
+{date:"2027-01-01",time:"17:30",ny:"07:00",tz:"EST",nak:"Vishakha",state:"उदय (Rise)",deg:210.5277},
+{date:"2027-01-01",time:"23:30",ny:"13:00",tz:"EST",nak:"Anuradha",state:"उदय (Rise)",deg:213.6488},
+{date:"2028-01-01",time:"05:30",ny:"19:00",tz:"EST",nak:"Purva Bhadrapada",state:"उदय (Rise)",deg:325.2509},
+{date:"2028-03-24",time:"11:30",ny:"02:00",tz:"EDT",nak:"Ardra",state:"उदय (Rise)",deg:72.6612},
+{date:"2029-01-01",time:"05:30",ny:"19:00",tz:"EST",nak:"Pushya",state:"उदय (Rise)",deg:104.2319},
+{date:"2029-05-12",time:"17:30",ny:"08:00",tz:"EDT",nak:"Krittika",state:"अस्त (Combust)",deg:39.7888},
+{date:"2030-01-01",time:"05:30",ny:"19:00",tz:"EST",nak:"Jyeshtha",state:"उदय (Rise)",deg:238.002},
+{date:"2030-03-11",time:"23:30",ny:"14:00",tz:"EDT",nak:"Ardra",state:"उदय (Rise)",deg:74.0635}
+];
+
+const DB = (typeof JplMasterDatabase !== "undefined" && Array.isArray(JplMasterDatabase))
+ ? JplMasterDatabase : FALLBACK_DATABASE;
+
+const NAKSHATRAS=["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
+let currentAsset="gold";
+
+function validateLogin(){
+ const u=document.getElementById("username").value.trim(), p=document.getElementById("password").value;
+ if(u==="Admin" && p==="Guruji@1379"){
+   document.getElementById("login-screen").style.display="none";
+   document.getElementById("main-dashboard").style.display="block";
+   buildSidebar(); queryDateRecord();
+ }else document.getElementById("login-error").innerText="त्रुटि: गलत लॉगिन विवरण!";
+}
+document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")validateLogin()});
+
+function switchAsset(asset){
+ currentAsset=asset;
+ document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+ const btn=document.querySelector('.tab-btn[data-asset="'+asset+'"]');
+ if(btn)btn.classList.add("active");
+ queryDateRecord();
+}
+function buildSidebar(){
+ const sidebar=document.getElementById("module-sidebar");
+ sidebar.innerHTML='<div class="sidebar-title">📂 27 स्वायत्त नक्षत्र फाइलें</div>';
+ NAKSHATRAS.forEach((nak,idx)=>{
+  const item=document.createElement("div");
+  item.className="sidebar-item";
+  item.textContent="फ़ाइल "+String(idx+1).padStart(2,"0")+": "+nak+" नक्षत्र";
+  item.onclick=()=>renderIndependentFile(nak,item);
+  sidebar.appendChild(item);
+ });
+}
+function queryDateRecord(){
+ const selectedDate=document.getElementById("search-date").value;
+ const display=document.getElementById("analytics-display");
+ const rows=DB.filter(r=>String(r.date)===selectedDate);
+ if(!rows.length){
+   display.innerHTML='<h3 style="color:#ff6666">⚠️ '+selectedDate+' का डेटा उपलब्ध नहीं है</h3><p>यहाँ केवल वास्तविक database.js में उपलब्ध records ही प्रदर्शित होंगे।</p>';
+   checkFridayBTST(selectedDate); return;
+ }
+ let html='<h2 style="color:var(--gold)">📅 '+selectedDate+' — '+currentAsset.toUpperCase()+' सत्र विश्लेषण</h2>';
+ html+='<div class="card-grid"><div class="card"><small>RECORDS</small><b>'+rows.length+'</b></div><div class="card"><small>ASSET</small><b>'+currentAsset.toUpperCase()+'</b></div><div class="card"><small>DATABASE</small><b>2026–2030</b></div><div class="card"><small>MODE</small><b>OFFLINE</b></div></div>';
+ html+='<table class="data-table"><thead><tr><th>IST समय</th><th>New York</th><th>TZ</th><th>नक्षत्र</th><th>अवस्था</th><th>देशांतर °</th></tr></thead><tbody>';
+ rows.forEach(r=>html+='<tr><td>'+esc(r.time)+'</td><td>'+esc(r.ny)+'</td><td>'+esc(r.tz)+'</td><td>'+esc(r.nak)+'</td><td>'+esc(r.state)+'</td><td>'+Number(r.deg).toFixed(4)+'</td></tr>');
+ html+='</tbody></table>';
+ display.innerHTML=html; checkFridayBTST(selectedDate);
+}
+function checkFridayBTST(dateString){
+ const d=new Date(dateString+"T00:00:00").getDay(), zone=document.getElementById("btst-alert-zone");
+ if(d===5) zone.innerHTML='🔥 <b>शुक्रवार वीकेंड प्रेडिक्शन:</b> यह शुक्रवार है। सोमवार ओपनिंग के लिए आपके उपलब्ध डेटाबेस रिकॉर्ड की जाँच करें।';
+ else zone.innerHTML='🔮 <b>दैनिक सत्र अलर्ट:</b> '+dateString+' के उपलब्ध नक्षत्र रिकॉर्ड सफलतापूर्वक रेंडर किए गए।';
+}
+function renderIndependentFile(nak,item){
+ document.querySelectorAll(".sidebar-item").forEach(x=>x.classList.remove("active"));
+ if(item)item.classList.add("active");
+ const rows=DB.filter(r=>r.nak===nak), display=document.getElementById("analytics-display");
+ let html='<h2 style="color:var(--gold)">📂 स्वायत्त नक्षत्र फ़ाइल: '+esc(nak.toUpperCase())+'</h2>';
+ html+='<p><b>कमोडिटी रेफरेंस:</b> '+currentAsset.toUpperCase()+' FUTURES · 5-वर्षीय सिंक</p>';
+ if(!rows.length){html+='<p style="color:var(--silver)">इस नक्षत्र का कोई रिकॉर्ड वर्तमान database.js में उपलब्ध नहीं है।</p>';}
+ else{
+  html+='<p><b>मिले रिकॉर्ड:</b> '+rows.length+'</p><table class="data-table"><thead><tr><th>दिनांक</th><th>समय</th><th>NY</th><th>TZ</th><th>स्थिति</th><th>डिग्री</th></tr></thead><tbody>';
+  rows.forEach(r=>html+='<tr><td>'+esc(r.date)+'</td><td>'+esc(r.time)+'</td><td>'+esc(r.ny)+'</td><td>'+esc(r.tz)+'</td><td>'+esc(r.state)+'</td><td>'+Number(r.deg).toFixed(4)+'</td></tr>');
+  html+='</tbody></table>';
+ }
+ display.innerHTML=html;
+}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+</script>
+</body>
+</html>
