@@ -1,108 +1,50 @@
-<!doctype html>
-<html lang="hi">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GURUJI — Module 2.6 Astrology Rules Engine</title>
+<!DOCTYPE html>
+<html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GURUJI — 45 Module Nakshatra Engine 2026–2030</title>
 <style>
-:root{--bg:#080b10;--panel:#111722;--panel2:#171e2a;--line:#273142;--gold:#d7b55a;--text:#f4f6f8;--muted:#9da8b7;--blue:#56a9ff}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,Arial,sans-serif}
-header{padding:20px 24px;border-bottom:1px solid var(--line);background:#0c1119;position:sticky;top:0;z-index:5}
-h1{margin:0;color:var(--gold);font-size:24px} .sub{color:var(--muted);font-size:13px;margin-top:5px}
-.app{display:grid;grid-template-columns:310px 1fr;min-height:calc(100vh - 83px)}
-aside{border-right:1px solid var(--line);background:var(--panel);padding:14px;overflow:auto;height:calc(100vh - 83px);position:sticky;top:83px}
-.search{width:100%;padding:11px;border:1px solid var(--line);background:#0b1017;color:#fff;border-radius:8px;margin-bottom:10px}
-.item{padding:10px 12px;border:1px solid transparent;border-radius:8px;cursor:pointer;margin-bottom:5px}
-.item:hover,.item.active{background:var(--panel2);border-color:var(--gold)}
-.item small{display:block;color:var(--muted);margin-top:3px}
-main{padding:22px;max-width:1500px;width:100%}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-button,.chip{border:1px solid var(--line);background:var(--panel);color:#fff;padding:9px 12px;border-radius:7px;cursor:pointer}
-button.active,.chip.active{border-color:var(--gold);color:var(--gold)}
-.hero{background:linear-gradient(135deg,#151b25,#0e141d);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:18px}
-.hero h2{margin:0 0 5px;color:var(--gold)} .meta{color:var(--muted);font-size:13px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
-.card h3{margin:0 0 10px;color:var(--blue);font-size:16px}
-.card h4{margin:12px 0 5px;color:var(--gold);font-size:13px}
-pre{white-space:pre-wrap;word-break:break-word;font-family:Segoe UI,Arial,sans-serif;line-height:1.6;color:#e8ecf1;margin:0}
-.notice{padding:12px;border-left:3px solid var(--gold);background:#17150e;color:#d9d1bd;margin-bottom:16px;border-radius:5px}
-.empty{color:var(--muted);padding:30px;text-align:center}
-@media(max-width:900px){.app{grid-template-columns:1fr}aside{position:relative;top:0;height:auto;border-right:0;border-bottom:1px solid var(--line)}.grid{grid-template-columns:1fr}}
-</style>
-</head>
-<body>
-<header>
-<h1>🪐 GURUJI — Module 2.6 Astrology Rules Engine</h1>
-<div class="sub">27 नक्षत्र • NASDAQ FUTURES • GOLD • SILVER • CRUDE • Source-derived • Offline</div>
-</header>
-<div class="app">
-<aside>
-<input id="filter" class="search" placeholder="नक्षत्र खोजें…">
-<div id="list"></div>
-</aside>
-<main>
-<div class="toolbar" id="assetbar"></div>
-<div id="content"></div>
-</main>
-</div>
-
+:root{--bg:#090a0f;--panel:#141822;--gold:#d4af37;--blue:#3498db;--silver:#b3b9c1;--border:#242b35;--green:#2ecc71;--red:#e74c3c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font-family:"Segoe UI",Arial,sans-serif}
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#050608,#141822)}
+.login-box{width:350px;padding:40px;background:var(--panel);border:2px solid var(--gold);border-radius:12px;text-align:center}
+input,button{font:inherit}.login-box input{width:100%;padding:12px;margin:8px 0;background:var(--bg);border:1px solid var(--border);color:#fff;border-radius:6px}
+.login-box button,.search-engine button{padding:11px 20px;background:var(--gold);border:0;border-radius:6px;font-weight:bold;cursor:pointer}
+.login-box button{width:100%;margin-top:12px}#main-dashboard{display:none;padding:20px;max-width:1600px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--border);padding-bottom:15px;margin-bottom:20px}
+h1{color:var(--gold);font-size:25px}.tabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.tab-btn{padding:12px 22px;background:var(--panel);border:1px solid var(--border);color:#fff;border-radius:6px;cursor:pointer;font-weight:bold}
+.tab-btn.active{border-color:var(--blue);color:var(--blue)}.search-engine{background:var(--panel);padding:15px;border:1px solid var(--border);border-radius:8px;display:flex;gap:15px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.search-engine input{padding:10px;background:var(--bg);border:1px solid var(--border);color:#fff;border-radius:6px}
+.alert-box{background:#1b1611;border-left:4px solid var(--gold);padding:15px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.btst-badge{padding:6px 15px;border-radius:4px;color:#000;font-weight:bold}.btst-long{background:var(--green)}.btst-short{background:var(--red)}.btst-none{background:var(--silver)}
+.grid{display:grid;grid-template-columns:280px 1fr;gap:20px}.sidebar,.content{background:var(--panel);border:1px solid var(--border);border-radius:8px}
+.sidebar{height:68vh;overflow:auto;padding:10px}.content{height:68vh;overflow:auto;padding:20px}.sidebar-title{color:var(--gold);font-weight:bold;padding:10px}
+.sidebar-item{padding:10px;border-bottom:1px solid var(--border);cursor:pointer}.sidebar-item:hover{background:var(--bg);color:var(--gold)}
+table{width:100%;border-collapse:collapse;margin:15px 0}th,td{border:1px solid var(--border);padding:10px;text-align:left}th{background:var(--bg);color:var(--gold)}
+.behavior{background:#161d26;padding:15px;border-radius:6px;margin:12px 0;border-left:3px solid var(--blue)}.behavior h4{margin-top:0;color:var(--gold)}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.sidebar,.content{height:auto;max-height:60vh}header{flex-direction:column;align-items:flex-start}}
+</style></head><body>
+<div id="login-screen"><div class="login-box"><h2 style="color:var(--gold)">GURUJI RESEARCH ENGINE</h2><p style="color:var(--silver)">100% ऑफलाइन मास्टर प्रणाली</p>
+<input id="username" placeholder="लॉगिन आईडी (Admin)"><input id="password" type="password" placeholder="पासवर्ड"><button onclick="validateLogin()">सिस्टम सक्रिय करें</button><p id="login-error" style="color:red"></p></div></div>
+<div id="main-dashboard"><header><h1>🪐 45-मॉड्यूल नक्षत्र समय-सारणी इंजन (2026–2030)</h1><div>🔒 Previous Database + Rules Module</div></header>
+<div class="tabs"><button class="tab-btn active" data-asset="nasdaq" onclick="switchAsset('nasdaq')">NASDAQ FUTURES (NQ)</button><button class="tab-btn " data-asset="gold" onclick="switchAsset('gold')">GOLD FUTURES (GC)</button><button class="tab-btn " data-asset="silver" onclick="switchAsset('silver')">SILVER FUTURES (SI)</button><button class="tab-btn " data-asset="crude" onclick="switchAsset('crude')">CRUDE OIL (CL)</button></div>
+<div class="search-engine"><b>कैलेंडर तारीख:</b><input type="date" id="search-date" min="2026-01-01" max="2030-12-31" value="2026-08-31"><button onclick="queryDateRecord()">Get Day Record</button></div>
+<div class="alert-box"><span id="alert-text">🔮 तारीख चुनें।</span><span id="btst-signal-badge" class="btst-badge btst-none">NO DATA</span></div>
+<div class="grid"><div class="sidebar" id="module-sidebar"></div><div class="content" id="analytics-display">कैलेंडर से तारीख चुनें।</div></div></div>
 <script src="database.js"></script>
 <script src="ruleset.js"></script>
 <script>
-const ASSETS = {nasdaq:"📉 NASDAQ FUTURES (NQ)",gold:"⚜️ GOLD FUTURES (GC)",silver:"🪙 SILVER FUTURES (SI)",crude:"🛢️ CRUDE OIL (CL)"};
-let selected = 1, asset = "all";
-
-function getRec(n){return NakshatraAdvancedRules.nakshatras.find(x=>x.number===n)}
-function buildList(){
- const q=(document.getElementById("filter").value||"").toLowerCase();
- const el=document.getElementById("list"); el.innerHTML="";
- NakshatraAdvancedRules.nakshatras.filter(r=>
-   `${r.number} ${r.name} ${r.name_hi}`.toLowerCase().includes(q)
- ).forEach(r=>{
-   const d=document.createElement("div"); d.className="item"+(r.number===selected?" active":"");
-   d.innerHTML=`<b>${String(r.number).padStart(2,"0")}. ${r.name_hi}</b><small>${r.name} • ${r.source_type}</small>`;
-   d.onclick=()=>{selected=r.number;buildList();render()};
-   el.appendChild(d);
- });
+const NAKSHATRAS=["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
+let currentAsset="nasdaq";
+const DB=(typeof JplMasterDatabase!=="undefined"&&Array.isArray(JplMasterDatabase))?JplMasterDatabase:[];
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function validateLogin(){if(document.getElementById("username").value.trim()==="Admin"&&document.getElementById("password").value==="Guruji@1379"){document.getElementById("login-screen").style.display="none";document.getElementById("main-dashboard").style.display="block";buildSidebar();queryDateRecord();}else document.getElementById("login-error").innerText="त्रुटि: गलत लॉगिन क्रेडेंशियल!";}
+document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")validateLogin();});
+function switchAsset(a){currentAsset=a;document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));document.querySelector('[data-asset="'+a+'"]').classList.add("active");queryDateRecord();}
+function buildSidebar(){const s=document.getElementById("module-sidebar");s.innerHTML='<div class="sidebar-title">📂 27 नक्षत्र नियम फोल्डर</div>';NAKSHATRAS.forEach((n,i)=>{const x=document.createElement("div");x.className="sidebar-item";x.textContent="📁 फ़ाइल "+String(i+1).padStart(2,"0")+": "+n+" नियम";x.onclick=()=>renderRule(n);s.appendChild(x);});}
+function getNak(n){return NakshatraAdvancedRules.nakshatras.find(x=>x.name===n)||NakshatraAdvancedRules.nakshatras.find(x=>x.number===NAKSHATRAS.indexOf(n)+1);}
+function renderPdf(n){const r=getNak(n),out=document.getElementById("analytics-display"); if(!r||!r.available){out.innerHTML='<div class="behavior"><h4>⚠️ '+esc(n)+' — PDF source unavailable</h4><p>Module 2.6 ZIP में इस नक्षत्र की PDF उपलब्ध नहीं थी। इसलिए कोई टूटा हुआ/अनुमानित Hindi text नहीं दिखाया जा रहा है।</p></div>';return;} const src=r.data_url; out.innerHTML='<div class="behavior"><h4>📄 '+esc(r.name_hi)+' ('+esc(r.name)+') — Original Module 2.6 PDF</h4><p style="color:var(--silver)">यह original PDF bytes से render हो रहा है। Hindi text को OCR/encoding conversion से नहीं बदला गया है।</p><iframe title="Original Nakshatra PDF" src="'+src+'" style="width:100%;height:58vh;border:1px solid var(--border);border-radius:6px;background:#fff"></iframe></div>';
 }
-function buildAssetBar(){
- const el=document.getElementById("assetbar");
- el.innerHTML=`<button class="${asset==="all"?"active":""}" onclick="asset='all';buildAssetBar();render()">ALL MODULES</button>`;
- Object.entries(ASSETS).forEach(([k,v])=>{
-   el.innerHTML+=`<button class="${asset===k?"active":""}" onclick="asset='${k}';buildAssetBar();render()">${v}</button>`;
- });
-}
-function card(title,text){
- return `<section class="card"><h3>${title}</h3><pre>${escapeHtml(text||"इस स्रोत में अलग से सामग्री उपलब्ध नहीं है।")}</pre></section>`;
-}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function render(){
- const r=getRec(selected); const c=document.getElementById("content");
- if(!r){c.innerHTML='<div class="empty">डेटा नहीं मिला।</div>';return}
- let html=`<div class="hero"><h2>${String(r.number).padStart(2,"0")}. ${r.name_hi} — ${r.name}</h2>
- <div class="meta">Source: ${escapeHtml(r.source_file)} • ${r.source_type} • Timezone: IST</div></div>`;
- if(r.number===8){
-   html+=`<div class="notice">⚠️ Module 2.6 ZIP में नक्षत्र #08 (पुष्य) की PDF मौजूद नहीं थी। इसलिए यह entry पहले से उपलब्ध supplied source block से रखी गई है; कोई नया rule invent नहीं किया गया।</div>`;
- }
- const sessions=[["asian","⛩️ एशियन सत्र"],["london","☕ लंदन सत्र"],["ny","🗽 न्यू यॉर्क सत्र"]];
- if(asset==="all"){
-   html+=`<div class="grid">`;
-   for(const [s,label] of sessions) html+=card(label,r.sessions[s]);
-   html+=`</div>`;
- }else{
-   html+=`<div class="grid">`;
-   for(const [s,label] of sessions){
-     const t=r.assets?.[s]?.[asset]||"";
-     html+=card(`${label} — ${ASSETS[asset]}`,t);
-   }
-   html+=`</div>`;
- }
- html+=`<div class="card" style="margin-top:15px"><h3>📄 Full Source Text</h3><pre>${escapeHtml(r.source_text)}</pre></div>`;
- c.innerHTML=html;
-}
-document.getElementById("filter").addEventListener("input",buildList);
-buildList();buildAssetBar();render();
-</script>
-</body>
-</html>
+function queryDateRecord(){const d=document.getElementById("search-date").value,out=document.getElementById("analytics-display");const rows=DB.filter(r=>d>=String(r.start_date)&&d<=String(r.end_date));if(!rows.length){out.innerHTML="<h3 style='color:red'>⚠️ "+esc(d)+" का कोई सक्रिय रिकॉर्ड नहीं मिला।</h3>";updateBtst(d,null);return;}const primary=rows[0].nak;let h="<h2 style='color:var(--blue)'>📅 "+esc(d)+" — Astronomical Sync</h2>";h+="<table><thead><tr><th>नक्षत्र</th><th>आरम्भ</th><th>IST</th><th>अन्त</th><th>IST</th><th>स्थिति</th></tr></thead><tbody>";rows.forEach(r=>h+="<tr><td>"+esc(r.nak)+"</td><td>"+esc(r.start_date)+"</td><td>"+esc(r.start_time_ist)+"</td><td>"+esc(r.end_date)+"</td><td>"+esc(r.end_time_ist)+"</td><td>"+esc(r.state)+"</td></tr>");h+="</tbody></table><h2 style='color:var(--blue)'>🛰️ Automatic Mapping: ["+currentAsset.toUpperCase()+"]</h2>";h+="<div class='behavior'><h4>📄 Source Rule Data</h4><p>नीचे selected Nakshatra की original Module 2.6 PDF दिखाई जा रही है ताकि Hindi अक्षर बिल्कुल source जैसे रहें।</p></div>";out.innerHTML=h;renderPdf(primary);updateBtst(d,primary);}
+function updateBtst(d,n){const badge=document.getElementById("btst-signal-badge"),txt=document.getElementById("alert-text");const fri=new Date(d+"T00:00:00").getDay()===5;badge.className="btst-badge btst-none";badge.innerText="SOURCE PDF";txt.innerHTML=fri?"🔥 <b>शुक्रवार BTST:</b> Source rule PDF देखें।":"🔮 <b>दैनिक सत्र:</b> Source rule PDF देखें।";}
+function renderRule(n){const out=document.getElementById("analytics-display"),r=getNak(n);let h="<h2>📁 "+esc(n.toUpperCase())+" — Rules Database</h2>";if(!r){out.innerHTML=h+"<p>Source module में data उपलब्ध नहीं है।</p>";return;}out.innerHTML=h+"<div class='behavior'><h4>Original Module 2.6 Source</h4><p>Hindi को exact रखने के लिए original PDF render की जा रही है।</p></div>";renderPdf(n);}
+</script></body></html>
