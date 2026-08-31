@@ -28,12 +28,12 @@ table{width:100%;border-collapse:collapse;margin:15px 0}th,td{border:1px solid v
 <div id="main-dashboard"><header><h1>🪐 45-मॉड्यूल नक्षत्र समय-सारणी इंजन (2026–2030)</h1><div>🔒 Previous Database + Rules Module</div></header>
 <div class="tabs"><button class="tab-btn active" data-asset="nasdaq" onclick="switchAsset('nasdaq')">NASDAQ FUTURES (NQ)</button><button class="tab-btn " data-asset="gold" onclick="switchAsset('gold')">GOLD FUTURES (GC)</button><button class="tab-btn " data-asset="silver" onclick="switchAsset('silver')">SILVER FUTURES (SI)</button><button class="tab-btn " data-asset="crude" onclick="switchAsset('crude')">CRUDE OIL (CL)</button></div>
 <div class="search-engine"><b>कैलेंडर तारीख:</b><input type="date" id="search-date" min="2026-01-01" max="2030-12-31" value="2026-08-31"><button onclick="queryDateRecord()">Get Day Record</button></div>
-<div class="alert-box"><span id="alert-text">🔮 तारीख चुनें।</span><span id="btst-signal-badge" class="btst-badge btst-none">NO DATA</span></div>
+<div class="alert-box"><span id="alert-text">🔮 तारीख चुनें।</span><span id="btst-signal-badge" class="btst-badge btst-none">NO DATA</span></div><div id="ruleset-status" style="color:var(--silver);font-size:12px;margin:-10px 0 15px;">✅ Calendar + Ruleset mapping loaded</div>
 <div class="grid"><div class="sidebar" id="module-sidebar"></div><div class="content" id="analytics-display">कैलेंडर से तारीख चुनें।</div></div></div>
 <script src="database.js"></script>
 <script src="ruleset.js"></script>
 <script>
-const NAKSHATRAS=["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
+
 let currentAsset="nasdaq";
 const DB=(typeof JplMasterDatabase!=="undefined"&&Array.isArray(JplMasterDatabase))?JplMasterDatabase:[];
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -41,10 +41,118 @@ function validateLogin(){if(document.getElementById("username").value.trim()==="
 document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")validateLogin();});
 function switchAsset(a){currentAsset=a;document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));document.querySelector('[data-asset="'+a+'"]').classList.add("active");queryDateRecord();}
 function buildSidebar(){const s=document.getElementById("module-sidebar");s.innerHTML='<div class="sidebar-title">📂 27 नक्षत्र नियम फोल्डर</div>';NAKSHATRAS.forEach((n,i)=>{const x=document.createElement("div");x.className="sidebar-item";x.textContent="📁 फ़ाइल "+String(i+1).padStart(2,"0")+": "+n+" नियम";x.onclick=()=>renderRule(n);s.appendChild(x);});}
-function getNak(n){return NakshatraAdvancedRules.nakshatras.find(x=>x.name===n)||NakshatraAdvancedRules.nakshatras.find(x=>x.number===NAKSHATRAS.indexOf(n)+1);}
-function renderPdf(n){const r=getNak(n),out=document.getElementById("analytics-display"); if(!r||!r.available){out.innerHTML='<div class="behavior"><h4>⚠️ '+esc(n)+' — PDF source unavailable</h4><p>Module 2.6 ZIP में इस नक्षत्र की PDF उपलब्ध नहीं थी। इसलिए कोई टूटा हुआ/अनुमानित Hindi text नहीं दिखाया जा रहा है।</p></div>';return;} const src=r.data_url; out.innerHTML='<div class="behavior"><h4>📄 '+esc(r.name_hi)+' ('+esc(r.name)+') — Original Module 2.6 PDF</h4><p style="color:var(--silver)">यह original PDF bytes से render हो रहा है। Hindi text को OCR/encoding conversion से नहीं बदला गया है।</p><iframe title="Original Nakshatra PDF" src="'+src+'" style="width:100%;height:58vh;border:1px solid var(--border);border-radius:6px;background:#fff"></iframe></div>';
+function canonicalNakshatraName(value){
+  const s=String(value??"").trim();
+  if(!s) return "";
+  // database.js may contain Hindi + English names, sometimes without a closing ')'.
+  const m=s.match(/\((Ashwini|Bharani|Krittika|Rohini|Mrigashira|Ardra|Punarvasu|Pushya|Ashlesha|Magha|Purva Phalguni|Uttara Phalguni|Hasta|Chitra|Swati|Vishakha|Anuradha|Jyeshtha|Mula|Purva Ashadha|Uttara Ashadha|Shravana|Dhanishta|Shatabhisha|Purva Bhadrapada|Uttara Bhadrapada|Revati)/i);
+  if(m) return m[1];
+  const aliases={
+    "पूर्वा फाल्गुनी":"Purva Phalguni","उत्तर फाल्गुनी":"Uttara Phalguni",
+    "पूर्वाषाढ़ा":"Purva Ashadha","उत्तराषाढ़ा":"Uttara Ashadha",
+    "पूर्वा भाद्रपद":"Purva Bhadrapada","उत्तर भाद्रपद":"Uttara Bhadrapada",
+    "मृगशिरा":"Mrigashira","आर्द्रा":"Ardra","पुनर्वसु":"Punarvasu",
+    "पुष्य":"Pushya","अश्लेषा":"Ashlesha","मघा":"Magha","हस्त":"Hasta",
+    "चित्रा":"Chitra","स्वाति":"Swati","विशाखा":"Vishakha","अनुराधा":"Anuradha",
+    "ज्येष्ठा":"Jyeshtha","मूल":"Mula","श्रवण":"Shravana","धनिष्ठा":"Dhanishta",
+    "शतभिषा":"Shatabhisha","रेवती":"Revati","अश्विनी":"Ashwini","भरणी":"Bharani",
+    "कृत्तिका":"Krittika","रोहिणी":"Rohini"
+  };
+  for(const k in aliases){if(s.includes(k)) return aliases[k];}
+  return s;
 }
-function queryDateRecord(){const d=document.getElementById("search-date").value,out=document.getElementById("analytics-display");const rows=DB.filter(r=>d>=String(r.start_date)&&d<=String(r.end_date));if(!rows.length){out.innerHTML="<h3 style='color:red'>⚠️ "+esc(d)+" का कोई सक्रिय रिकॉर्ड नहीं मिला।</h3>";updateBtst(d,null);return;}const primary=rows[0].nak;let h="<h2 style='color:var(--blue)'>📅 "+esc(d)+" — Astronomical Sync</h2>";h+="<table><thead><tr><th>नक्षत्र</th><th>आरम्भ</th><th>IST</th><th>अन्त</th><th>IST</th><th>स्थिति</th></tr></thead><tbody>";rows.forEach(r=>h+="<tr><td>"+esc(r.nak)+"</td><td>"+esc(r.start_date)+"</td><td>"+esc(r.start_time_ist)+"</td><td>"+esc(r.end_date)+"</td><td>"+esc(r.end_time_ist)+"</td><td>"+esc(r.state)+"</td></tr>");h+="</tbody></table><h2 style='color:var(--blue)'>🛰️ Automatic Mapping: ["+currentAsset.toUpperCase()+"]</h2>";h+="<div class='behavior'><h4>📄 Source Rule Data</h4><p>नीचे selected Nakshatra की original Module 2.6 PDF दिखाई जा रही है ताकि Hindi अक्षर बिल्कुल source जैसे रहें।</p></div>";out.innerHTML=h;renderPdf(primary);updateBtst(d,primary);}
-function updateBtst(d,n){const badge=document.getElementById("btst-signal-badge"),txt=document.getElementById("alert-text");const fri=new Date(d+"T00:00:00").getDay()===5;badge.className="btst-badge btst-none";badge.innerText="SOURCE PDF";txt.innerHTML=fri?"🔥 <b>शुक्रवार BTST:</b> Source rule PDF देखें।":"🔮 <b>दैनिक सत्र:</b> Source rule PDF देखें।";}
-function renderRule(n){const out=document.getElementById("analytics-display"),r=getNak(n);let h="<h2>📁 "+esc(n.toUpperCase())+" — Rules Database</h2>";if(!r){out.innerHTML=h+"<p>Source module में data उपलब्ध नहीं है।</p>";return;}out.innerHTML=h+"<div class='behavior'><h4>Original Module 2.6 Source</h4><p>Hindi को exact रखने के लिए original PDF render की जा रही है।</p></div>";renderPdf(n);}
+
+function getRuleForDatabaseNak(value){
+  const key=canonicalNakshatraName(value);
+  return NakshatraAdvancedRules[key]||null;
+}
+
+function queryDateRecord(){
+  const d=document.getElementById("search-date").value;
+  const out=document.getElementById("analytics-display");
+  const rows=DB.filter(r=>d>=String(r.start_date)&&d<=String(r.end_date));
+
+  if(!rows.length){
+    out.innerHTML="<h3 style='color:red'>⚠️ "+esc(d)+" का कोई सक्रिय रिकॉर्ड नहीं मिला।</h3>";
+    updateBtst(d,null);
+    return;
+  }
+
+  // Remove exact duplicate calendar records without changing database.js itself.
+  const unique=[];
+  const seen=new Set();
+  rows.forEach(r=>{
+    const k=[r.nak,r.start_date,r.start_time_ist,r.end_date,r.end_time_ist].join("|");
+    if(!seen.has(k)){seen.add(k);unique.push(r);}
+  });
+
+  const primary=canonicalNakshatraName(unique[0].nak);
+  let h="<h2 style='color:var(--blue)'>📅 "+esc(d)+" — Astronomical Sync</h2>";
+  h+="<table><thead><tr><th>नक्षत्र</th><th>आरम्भ</th><th>IST</th><th>अन्त</th><th>IST</th><th>स्थिति</th></tr></thead><tbody>";
+  unique.forEach(r=>{
+    h+="<tr><td>"+esc(r.nak)+"</td><td>"+esc(r.start_date)+"</td><td>"+esc(r.start_time_ist)+"</td><td>"+esc(r.end_date)+"</td><td>"+esc(r.end_time_ist)+"</td><td>"+esc(r.state)+"</td></tr>";
+  });
+  h+="</tbody></table>";
+  h+="<h2 style='color:var(--blue)'>🛰️ Automatic Mapping: ["+currentAsset.toUpperCase()+"]</h2>";
+
+  const rule=getRuleForDatabaseNak(unique[0].nak);
+  if(rule&&rule[currentAsset]){
+    const b=rule[currentAsset];
+    h+="<p>Primary Nakshatra: <b>"+esc(primary)+"</b></p>";
+    h+="<div class='behavior'><h4>⛩️ Asian Session</h4><p>"+esc(b.asian)+"</p></div>";
+    h+="<div class='behavior'><h4>☕ London Session</h4><p>"+esc(b.london)+"</p></div>";
+    h+="<div class='behavior'><h4>🗽 New York Session</h4><p>"+esc(b.ny)+"</p></div>";
+  }else{
+    h+="<p style='color:var(--silver)'>इस नक्षत्र के लिए इस asset का rule source module में उपलब्ध नहीं है।</p>";
+  }
+
+  // Show all overlapping Nakshatra rules when a date crosses a Nakshatra boundary.
+  if(unique.length>1){
+    h+="<h2 style='color:var(--blue)'>🔗 Date Boundary Mapping</h2>";
+    unique.slice(1).forEach(r=>{
+      const k=canonicalNakshatraName(r.nak), rr=getRuleForDatabaseNak(r.nak);
+      if(rr&&rr[currentAsset]){
+        const b=rr[currentAsset];
+        h+="<div class='behavior'><h4>"+esc(k)+" — "+currentAsset.toUpperCase()+"</h4>";
+        h+="<p><b>Asian:</b> "+esc(b.asian)+"</p>";
+        h+="<p><b>London:</b> "+esc(b.london)+"</p>";
+        h+="<p><b>New York:</b> "+esc(b.ny)+"</p></div>";
+      }
+    });
+  }
+
+  out.innerHTML=h;
+  updateBtst(d,primary);
+}
+
+function updateBtst(d,n){
+  const badge=document.getElementById("btst-signal-badge");
+  const txt=document.getElementById("alert-text");
+  const fri=new Date(d+"T00:00:00").getDay()===5;
+  const rule=n?getRuleForDatabaseNak(n):null;
+  const sig=fri&&rule&&rule.btst?rule.btst:"सत्र मोड";
+  badge.className="btst-badge "+(String(sig).includes("LONG")?"btst-long":String(sig).includes("SHORT")?"btst-short":"btst-none");
+  badge.innerText=sig;
+  txt.innerHTML=fri?"🔥 <b>शुक्रवार BTST:</b> "+currentAsset.toUpperCase()+" module के लिए rule mapping लागू है।":"🔮 <b>दैनिक सत्र:</b> Friday BTST mode निष्क्रिय है।";
+}
+
+function renderRule(n){
+  const out=document.getElementById("analytics-display");
+  const key=canonicalNakshatraName(n);
+  const r=getRuleForDatabaseNak(key);
+  let h="<h2>📁 "+esc(key.toUpperCase())+" — Rules Database</h2>";
+  if(!r){
+    out.innerHTML=h+"<p>इस source module में इस नक्षत्र का विस्तृत rule उपलब्ध नहीं है।</p>";
+    return;
+  }
+  [["NASDAQ FUTURES","nasdaq"],["GOLD FUTURES","gold"],["SILVER FUTURES","silver"],["CRUDE OIL","crude"]].forEach(([l,k])=>{
+    const b=r[k];
+    h+="<div class='behavior'><h4>"+l+"</h4>";
+    h+="<p><b>Asian:</b> "+esc(b.asian)+"</p>";
+    h+="<p><b>London:</b> "+esc(b.london)+"</p>";
+    h+="<p><b>New York:</b> "+esc(b.ny)+"</p></div>";
+  });
+  h+="<div class='behavior'><h4>Friday BTST Default</h4><p><b>"+esc(r.btst)+"</b></p></div>";
+  out.innerHTML=h;
+}
 </script></body></html>
