@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GURUJI — 45 Module Nakshatra Engine 2026–2030</title>
+<style>
+:root{--bg:#090a0f;--panel:#141822;--gold:#d4af37;--blue:#3498db;--silver:#b3b9c1;--border:#242b35;--green:#2ecc71;--red:#e74c3c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font-family:"Segoe UI",Arial,sans-serif}
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#050608,#141822)}
+.login-box{width:350px;padding:40px;background:var(--panel);border:2px solid var(--gold);border-radius:12px;text-align:center}
+input,button{font:inherit}.login-box input{width:100%;padding:12px;margin:8px 0;background:var(--bg);border:1px solid var(--border);color:#fff;border-radius:6px}
+.login-box button,.search-engine button{padding:11px 20px;background:var(--gold);border:0;border-radius:6px;font-weight:bold;cursor:pointer}
+.login-box button{width:100%;margin-top:12px}#main-dashboard{display:none;padding:20px;max-width:1600px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--border);padding-bottom:15px;margin-bottom:20px}
+h1{color:var(--gold);font-size:25px}.tabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.tab-btn{padding:12px 22px;background:var(--panel);border:1px solid var(--border);color:#fff;border-radius:6px;cursor:pointer;font-weight:bold}
+.tab-btn.active{border-color:var(--blue);color:var(--blue)}.search-engine{background:var(--panel);padding:15px;border:1px solid var(--border);border-radius:8px;display:flex;gap:15px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.search-engine input{padding:10px;background:var(--bg);border:1px solid var(--border);color:#fff;border-radius:6px}
+.alert-box{background:#1b1611;border-left:4px solid var(--gold);padding:15px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.btst-badge{padding:6px 15px;border-radius:4px;color:#000;font-weight:bold}.btst-long{background:var(--green)}.btst-short{background:var(--red)}.btst-none{background:var(--silver)}
+.grid{display:grid;grid-template-columns:280px 1fr;gap:20px}.sidebar,.content{background:var(--panel);border:1px solid var(--border);border-radius:8px}
+.sidebar{height:68vh;overflow:auto;padding:10px}.content{height:68vh;overflow:auto;padding:20px}.sidebar-title{color:var(--gold);font-weight:bold;padding:10px}
+.sidebar-item{padding:10px;border-bottom:1px solid var(--border);cursor:pointer}.sidebar-item:hover{background:var(--bg);color:var(--gold)}
+table{width:100%;border-collapse:collapse;margin:15px 0}th,td{border:1px solid var(--border);padding:10px;text-align:left}th{background:var(--bg);color:var(--gold)}
+.behavior{background:#161d26;padding:15px;border-radius:6px;margin:12px 0;border-left:3px solid var(--blue)}.behavior h4{margin-top:0;color:var(--gold)}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.sidebar,.content{height:auto;max-height:60vh}header{flex-direction:column;align-items:flex-start}}
+</style></head><body>
+<div id="login-screen"><div class="login-box"><h2 style="color:var(--gold)">GURUJI RESEARCH ENGINE</h2><p style="color:var(--silver)">100% ऑफलाइन मास्टर प्रणाली</p>
+<input id="username" placeholder="लॉगिन आईडी (Admin)"><input id="password" type="password" placeholder="पासवर्ड"><button onclick="validateLogin()">सिस्टम सक्रिय करें</button><p id="login-error" style="color:red"></p></div></div>
+<div id="main-dashboard"><header><h1>🪐 45-मॉड्यूल नक्षत्र समय-सारणी इंजन (2026–2030)</h1><div>🔒 Previous Database + Rules Module</div></header>
+<div class="tabs"><button class="tab-btn active" data-asset="nasdaq" onclick="switchAsset('nasdaq')">NASDAQ FUTURES (NQ)</button><button class="tab-btn " data-asset="gold" onclick="switchAsset('gold')">GOLD FUTURES (GC)</button><button class="tab-btn " data-asset="silver" onclick="switchAsset('silver')">SILVER FUTURES (SI)</button><button class="tab-btn " data-asset="crude" onclick="switchAsset('crude')">CRUDE OIL (CL)</button></div>
+<div class="search-engine"><b>कैलेंडर तारीख:</b><input type="date" id="search-date" min="2026-01-01" max="2030-12-31" value="2026-08-31"><button onclick="queryDateRecord()">Get Day Record</button></div>
+<div class="alert-box"><span id="alert-text">🔮 तारीख चुनें।</span><span id="btst-signal-badge" class="btst-badge btst-none">NO DATA</span></div>
+<div class="grid"><div class="sidebar" id="module-sidebar"></div><div class="content" id="analytics-display">कैलेंडर से तारीख चुनें।</div></div></div>
+<script src="database.js"></script>
+<script>
+const NakshatraAdvancedRules={
+  "Ashwini": {
+    "nasdaq": {
+      "asian": "धीमा रोटेशन, पैसिव वॉल्यूम प्रवाह।",
+      "london": "यूरोपीय ओपनिंग पर फॉल्स ब्रेकआउट की संभावना।",
+      "ny": "यूएस कैश ओपन होते ही तीव्र टेक-स्टॉक लिक्विडेशन रन्स।"
+    },
+    "gold": {
+      "asian": "संकुचित रेंज, कंसॉलिडेशन बकेट शांत है।",
+      "london": "संस्थागत खरीदारी अलाइनमेंट, 15-मिनट बकेट पॉजिटिव।",
+      "ny": "हाई-वेलोसिटी विस्तार, सुरक्षित बुलियन निवेश गति।"
+    },
+    "silver": {
+      "asian": "अत्यधिक उतार-चढ़ाव गति, रेंज निष्कर्षण कठिन।",
+      "london": "औद्योगिक रोटेशन सक्रिय, वॉल्यूम गति दोगुनी।",
+      "ny": "तीव्र लिक्विडेशन स्पाइक्स, आक्रामक प्रॉफिट बुकिंग चक्र।"
+    },
+    "crude": {
+      "asian": "पैसिव वॉल्यूम, मिडिल ईस्ट सप्लाई स्थिर।",
+      "london": "यूरोपीय मांग दबाव, प्राइस रोटेशन सामान्य।",
+      "ny": "यूएस इन्वेंटरी (EIA) डेटा पर तीव्र ट्रेंड थकावट सूचकांक।"
+    },
+    "btst": "🔴 BTST SHORT"
+  },
+  "Bharani": {
+    "nasdaq": {
+      "asian": "शुरुआती टेक-वॉल्यूम संपीड़न, रेंज बाउंड।",
+      "london": "लंदन ओपन पर आक्रामक शॉर्ट-कवरिंग रन्स।",
+      "ny": "तीव्र संस्थागत रोटेशन, भारी मात्रा में टेक-सेलिंग प्रेशर।"
+    },
+    "gold": {
+      "asian": "स्थिर आधारभूत प्रवृत्तियां, वॉल्यूम म्यूट।",
+      "london": "एशियन रेंज सीमाओं का परीक्षण, पुलबैक संवेदनशीलता।",
+      "ny": "मैक्रो-डेटा रिलीज पर आक्रामक ट्रेंड थकावट बिंदु।"
+    },
+    "silver": {
+      "asian": "अत्यधिक हिंसक उतार-चढ़ाव, शॉर्ट स्कैल्पिंग प्रभावी।",
+      "london": "लंदन संस्थागत ड्राइव न्यूट्रल बकेट में लॉक।",
+      "ny": "चरम वोलैटिलिटी ब्रेकआउट, गहरे लिक्विडेशन रन्स।"
+    },
+    "crude": {
+      "asian": "ओपेक समाचार आधारित अस्थिरता चक्र सक्रिय।",
+      "london": "यूरोपीय रोटेशन आक्रामक प्रवृत्तियों में सिंक।",
+      "ny": "अचानक वॉल्यूम स्पाइक्स, अनपेक्षित डायरेक्शनल शिफ्ट।"
+    },
+    "btst": "🟢 BTST LONG"
+  },
+  "Ardra": {
+    "nasdaq": {
+      "asian": "टेक बकेट्स में शोर पूरी तरह से गायब।",
+      "london": "फॉल्स डायरेक्शनल सिग्नल्स, टाइम-decay उच्च।",
+      "ny": "FOMC विंडोज़ के समय तीव्र वेग से डायरेक्शनल ब्रेकआउट।"
+    },
+    "gold": {
+      "asian": "सुरक्षित निवेश प्रवाह मंद गति से सक्रिय।",
+      "london": "लंदन संस्थागत प्रवाह में तीव्र संकुचन ब्लॉक।",
+      "ny": "US CPI डेटा समय सीमा पर तीव्र बुलियन स्पाइक्स।"
+    },
+    "silver": {
+      "asian": "औद्योगिक वॉल्यूम रोटेशन पूरी तरह साइडवेज।",
+      "london": "कम उतार-चढ़ाव वाला संस्थागत संतुलन चरण।",
+      "ny": "अचानक ट्रेंड रिवर्सल, क्रोनोलॉजिकल शिफ्ट।"
+    },
+    "crude": {
+      "asian": "भू-राजनीतिक तनाव आधारित संकुचित रेंज।",
+      "london": "यूरोपीय औद्योगिक वॉल्यूम रोटेशन स्थिर।",
+      "ny": "यूएस ऊर्जा डेटा समय पर तीव्र लिक्विडेशन वेग।"
+    },
+    "btst": "⚪ NO POSITION"
+  },
+  "Mrigashira": {
+    "nasdaq": {
+      "asian": "स्थिर प्री-मार्केट सेटअप, वॉल्यूम संतुलित।",
+      "london": "यूरोपीय क्रॉस-करंट्स न्यूट्रल ज़ोन में लॉग।",
+      "ny": "यूएस कैश ओपन पर संतुलित संस्थागत खरीदारी।"
+    },
+    "gold": {
+      "asian": "Consolidation बकेट अत्यधिक शांत।",
+      "london": "15-मिनट क्रोनोलॉजिकल अलाइनमेंट पूरी तरह संतुलित।",
+      "ny": "स्थिर पोजीशनल एक्सपेंशन, मंद प्रवृत्तियां।"
+    },
+    "silver": {
+      "asian": "शॉर्ट-टर्म रिवर्सल्स का विश्लेषण स्थिर।",
+      "london": "कम उतार-चढ़ाव वाला संतुलित भौतिक व्यापार।",
+      "ny": "निश्चित क्रोनोलॉजिकल समय अंतरालों में प्राइस रिवर्सल।"
+    },
+    "crude": {
+      "asian": "वैश्विक आपूर्ति डेटा आधारित स्थिर रेंज।",
+      "london": "European मिड-डे रोटेशन पूरी तरह म्यूट।",
+      "ny": "ऊर्जा फ्यूचर्स चक्र में क्रमिक वॉल्यूम रोटेशन।"
+    },
+    "btst": "⚪ NO POSITION"
+  },
+  "Purva Phalguni": {
+    "nasdaq": {
+      "asian": "टेक-स्टॉक्स में भारी मंदी का पूर्वाभास।",
+      "london": "यूरोपीय सत्र में आक्रामक शॉर्ट पोजीशन्स सक्रिय।",
+      "ny": "US टेक अर्निंग्स डेटा रिलीज़ पर चरम थकावट चक्र।"
+    },
+    "gold": {
+      "asian": "बुलियन चक्र में भौतिक संपीड़न ब्लॉक।",
+      "london": "लंदन ओपन पर दिशाहीन रोटेशनल सीक्वेंस।",
+      "ny": "अचानक लिक्विडेशन रन्स, गहरे प्रवृत्तियाँ।"
+    },
+    "silver": {
+      "asian": "चरम उतार-चढ़ाव गति, ब्रेकआउट्स पूरी तरह फॉल्स।",
+      "london": "औद्योगिक संवेदनशीलता सूचकांक आक्रामक मंदी में।",
+      "ny": "अत्यधिक सेलिंग प्रेशर, अचानक दिशात्मक मंदी।"
+    },
+    "crude": {
+      "asian": "इन्वेंटरी से पूर्व पैसिव वॉल्यूम सीक्वेंस।",
+      "london": "यूरोपीय ऊर्जा फ्यूचर्स चक्र पूरी तरह म्यूट।",
+      "ny": "ओपेक कटौती निर्णयों पर तीव्र मंदी ब्रेकआउट।"
+    },
+    "btst": "🔴 BTST SHORT"
+  }
+};
+const NAKSHATRAS=["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"];
+let currentAsset="nasdaq";
+const DB=(typeof JplMasterDatabase!=="undefined"&&Array.isArray(JplMasterDatabase))?JplMasterDatabase:[];
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function validateLogin(){if(document.getElementById("username").value.trim()==="Admin"&&document.getElementById("password").value==="Guruji@1379"){document.getElementById("login-screen").style.display="none";document.getElementById("main-dashboard").style.display="block";buildSidebar();queryDateRecord();}else document.getElementById("login-error").innerText="त्रुटि: गलत लॉगिन क्रेडेंशियल!";}
+document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")validateLogin();});
+function switchAsset(a){currentAsset=a;document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));document.querySelector('[data-asset="'+a+'"]').classList.add("active");queryDateRecord();}
+function buildSidebar(){const s=document.getElementById("module-sidebar");s.innerHTML='<div class="sidebar-title">📂 27 नक्षत्र नियम फोल्डर</div>';NAKSHATRAS.forEach((n,i)=>{const x=document.createElement("div");x.className="sidebar-item";x.textContent="📁 फ़ाइल "+String(i+1).padStart(2,"0")+": "+n+" नियम";x.onclick=()=>renderRule(n);s.appendChild(x);});}
+function queryDateRecord(){
+ const d=document.getElementById("search-date").value, out=document.getElementById("analytics-display");
+ const rows=DB.filter(r=>d>=String(r.start_date)&&d<=String(r.end_date));
+ if(!rows.length){out.innerHTML="<h3 style='color:red'>⚠️ "+esc(d)+" का कोई सक्रिय रिकॉर्ड नहीं मिला।</h3>";updateBtst(d,null);return;}
+ const primary=rows[0].nak; let h="<h2 style='color:var(--blue)'>📅 "+esc(d)+" — Astronomical Sync</h2>";
+ h+="<table><thead><tr><th>नक्षत्र</th><th>आरम्भ</th><th>IST</th><th>अन्त</th><th>IST</th><th>स्थिति</th></tr></thead><tbody>";
+ rows.forEach(r=>h+="<tr><td>"+esc(r.nak)+"</td><td>"+esc(r.start_date)+"</td><td>"+esc(r.start_time_ist)+"</td><td>"+esc(r.end_date)+"</td><td>"+esc(r.end_time_ist)+"</td><td>"+esc(r.state)+"</td></tr>");
+ h+="</tbody></table><h2 style='color:var(--blue)'>🛰️ Automatic Mapping: ["+currentAsset.toUpperCase()+"]</h2>";
+ const rule=NakshatraAdvancedRules[primary];
+ if(rule&&rule[currentAsset]){const b=rule[currentAsset];h+="<p>Primary Nakshatra: <b>"+esc(primary)+"</b></p><div class='behavior'><h4>⛩️ Asian Session</h4><p>"+b.asian+"</p></div><div class='behavior'><h4>☕ London Session</h4><p>"+b.london+"</p></div><div class='behavior'><h4>🗽 New York Session</h4><p>"+b.ny+"</p></div>";}
+ else h+="<p style='color:var(--silver)'>इस नक्षत्र के लिए इस asset का rule source module में उपलब्ध नहीं है।</p>";
+ out.innerHTML=h;updateBtst(d,primary);
+}
+function updateBtst(d,n){const badge=document.getElementById("btst-signal-badge"),txt=document.getElementById("alert-text");const fri=new Date(d+"T00:00:00").getDay()===5;const rule=n?NakshatraAdvancedRules[n]:null;const sig=fri&&rule?rule.btst:"सत्र मोड";badge.className="btst-badge "+(String(sig).includes("LONG")?"btst-long":String(sig).includes("SHORT")?"btst-short":"btst-none");badge.innerText=sig;txt.innerHTML=fri?"🔥 <b>शुक्रवार BTST:</b> "+currentAsset.toUpperCase()+" module के लिए rule mapping लागू है।":"🔮 <b>दैनिक सत्र:</b> Friday BTST mode निष्क्रिय है।";}
+function renderRule(n){const out=document.getElementById("analytics-display"),r=NakshatraAdvancedRules[n];let h="<h2>📁 "+esc(n.toUpperCase())+" — Rules Database</h2>";if(!r){out.innerHTML=h+"<p>इस source module में इस नक्षत्र का विस्तृत rule उपलब्ध नहीं है।</p>";return;}[["NASDAQ FUTURES","nasdaq"],["GOLD FUTURES","gold"],["SILVER FUTURES","silver"],["CRUDE OIL","crude"]].forEach(([l,k])=>{const b=r[k];h+="<div class='behavior'><h4>"+l+"</h4><p><b>Asian:</b> "+b.asian+"</p><p><b>London:</b> "+b.london+"</p><p><b>New York:</b> "+b.ny+"</p></div>";});h+="<div class='behavior'><h4>Friday BTST Default</h4><p><b>"+r.btst+"</b></p></div>";out.innerHTML=h;}
+</script></body></html>
