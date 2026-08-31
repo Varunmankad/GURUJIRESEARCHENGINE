@@ -73,96 +73,172 @@ header h1{color:var(--gold);font-size:25px;margin:0}.tabs{display:flex;gap:15px;
 <script>
 "use strict";
 
-const FALLBACK_DATABASE = [
-{date:"2026-01-01",time:"05:30",ny:"19:00",tz:"EST",nak:"Mrigashira",state:"उदय (Rise)",deg:66.3462},
-{date:"2026-01-01",time:"11:30",ny:"01:00",tz:"EST",nak:"Ardra",state:"उदय (Rise)",deg:70.0973},
-{date:"2026-01-01",time:"17:30",ny:"07:00",tz:"EST",nak:"Ardra",state:"उदय (Rise)",deg:73.8554},
-{date:"2026-01-01",time:"23:30",ny:"13:00",tz:"EST",nak:"Ardra",state:"उदय (Rise)",deg:77.6182},
-{date:"2026-08-31",time:"05:30",ny:"20:00",tz:"EDT",nak:"Ashwini",state:"उदय (Rise)",deg:11.4982},
-{date:"2026-08-31",time:"11:30",ny:"02:00",tz:"EDT",nak:"Bharani",state:"उदय (Rise)",deg:14.8653},
-{date:"2026-08-31",time:"17:30",ny:"08:00",tz:"EDT",nak:"Bharani",state:"उदय (Rise)",deg:18.246},
-{date:"2026-08-31",time:"23:30",ny:"14:00",tz:"EDT",nak:"Bharani",state:"उदय (Rise)",deg:21.64},
-{date:"2027-01-01",time:"05:30",ny:"19:00",tz:"EST",nak:"Vishakha",state:"उदय (Rise)",deg:204.2355},
-{date:"2027-01-01",time:"11:30",ny:"01:00",tz:"EST",nak:"Vishakha",state:"उदय (Rise)",deg:207.3902},
-{date:"2027-01-01",time:"17:30",ny:"07:00",tz:"EST",nak:"Vishakha",state:"उदय (Rise)",deg:210.5277},
-{date:"2027-01-01",time:"23:30",ny:"13:00",tz:"EST",nak:"Anuradha",state:"उदय (Rise)",deg:213.6488},
-{date:"2028-01-01",time:"05:30",ny:"19:00",tz:"EST",nak:"Purva Bhadrapada",state:"उदय (Rise)",deg:325.2509},
-{date:"2028-03-24",time:"11:30",ny:"02:00",tz:"EDT",nak:"Ardra",state:"उदय (Rise)",deg:72.6612},
-{date:"2029-01-01",time:"05:30",ny:"19:00",tz:"EST",nak:"Pushya",state:"उदय (Rise)",deg:104.2319},
-{date:"2029-05-12",time:"17:30",ny:"08:00",tz:"EDT",nak:"Krittika",state:"अस्त (Combust)",deg:39.7888},
-{date:"2030-01-01",time:"05:30",ny:"19:00",tz:"EST",nak:"Jyeshtha",state:"उदय (Rise)",deg:238.002},
-{date:"2030-03-11",time:"23:30",ny:"14:00",tz:"EDT",nak:"Ardra",state:"उदय (Rise)",deg:74.0635}
+const DB = (typeof JplMasterDatabase !== "undefined" && Array.isArray(JplMasterDatabase))
+  ? JplMasterDatabase : [];
+
+const NAKSHATRAS = [
+  "Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu",
+  "Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta",
+  "Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha",
+  "Uttara Ashadha","Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada",
+  "Uttara Bhadrapada","Revati"
 ];
 
-const DB = (typeof JplMasterDatabase !== "undefined" && Array.isArray(JplMasterDatabase))
- ? JplMasterDatabase : FALLBACK_DATABASE;
-
-const NAKSHATRAS=["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
-let currentAsset="gold";
+let currentAsset = "gold";
 
 function validateLogin(){
- const u=document.getElementById("username").value.trim(), p=document.getElementById("password").value;
- if(u==="Admin" && p==="Guruji@1379"){
-   document.getElementById("login-screen").style.display="none";
-   document.getElementById("main-dashboard").style.display="block";
-   buildSidebar(); queryDateRecord();
- }else document.getElementById("login-error").innerText="त्रुटि: गलत लॉगिन विवरण!";
+  const u = document.getElementById("username").value.trim();
+  const p = document.getElementById("password").value;
+  if(u === "Admin" && p === "Guruji@1379"){
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("main-dashboard").style.display = "block";
+    buildSidebar();
+    queryDateRecord();
+  } else {
+    document.getElementById("login-error").innerText = "त्रुटि: गलत लॉगिन विवरण!";
+  }
 }
-document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")validateLogin()});
+
+document.getElementById("password").addEventListener("keydown", e => {
+  if(e.key === "Enter") validateLogin();
+});
 
 function switchAsset(asset){
- currentAsset=asset;
- document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
- const btn=document.querySelector('.tab-btn[data-asset="'+asset+'"]');
- if(btn)btn.classList.add("active");
- queryDateRecord();
+  currentAsset = asset;
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  const btn = document.querySelector('.tab-btn[data-asset="' + asset + '"]');
+  if(btn) btn.classList.add("active");
+  queryDateRecord();
 }
+
 function buildSidebar(){
- const sidebar=document.getElementById("module-sidebar");
- sidebar.innerHTML='<div class="sidebar-title">📂 27 स्वायत्त नक्षत्र फाइलें</div>';
- NAKSHATRAS.forEach((nak,idx)=>{
-  const item=document.createElement("div");
-  item.className="sidebar-item";
-  item.textContent="फ़ाइल "+String(idx+1).padStart(2,"0")+": "+nak+" नक्षत्र";
-  item.onclick=()=>renderIndependentFile(nak,item);
-  sidebar.appendChild(item);
- });
+  const sidebar = document.getElementById("module-sidebar");
+  sidebar.innerHTML = '<div class="sidebar-title">📂 27 स्वायत्त नक्षत्र फाइलें</div>';
+
+  NAKSHATRAS.forEach((nak, idx) => {
+    const item = document.createElement("div");
+    item.className = "sidebar-item";
+    item.textContent = "फ़ाइल " + String(idx + 1).padStart(2,"0") + ": " + nak + " नक्षत्र";
+    item.onclick = () => renderIndependentFile(nak, item);
+    sidebar.appendChild(item);
+  });
 }
+
 function queryDateRecord(){
- const selectedDate=document.getElementById("search-date").value;
- const display=document.getElementById("analytics-display");
- const rows=DB.filter(r=>String(r.date)===selectedDate);
- if(!rows.length){
-   display.innerHTML='<h3 style="color:#ff6666">⚠️ '+selectedDate+' का डेटा उपलब्ध नहीं है</h3><p>यहाँ केवल वास्तविक database.js में उपलब्ध records ही प्रदर्शित होंगे।</p>';
-   checkFridayBTST(selectedDate); return;
- }
- let html='<h2 style="color:var(--gold)">📅 '+selectedDate+' — '+currentAsset.toUpperCase()+' सत्र विश्लेषण</h2>';
- html+='<div class="card-grid"><div class="card"><small>RECORDS</small><b>'+rows.length+'</b></div><div class="card"><small>ASSET</small><b>'+currentAsset.toUpperCase()+'</b></div><div class="card"><small>DATABASE</small><b>2026–2030</b></div><div class="card"><small>MODE</small><b>OFFLINE</b></div></div>';
- html+='<table class="data-table"><thead><tr><th>IST समय</th><th>New York</th><th>TZ</th><th>नक्षत्र</th><th>अवस्था</th><th>देशांतर °</th></tr></thead><tbody>';
- rows.forEach(r=>html+='<tr><td>'+esc(r.time)+'</td><td>'+esc(r.ny)+'</td><td>'+esc(r.tz)+'</td><td>'+esc(r.nak)+'</td><td>'+esc(r.state)+'</td><td>'+Number(r.deg).toFixed(4)+'</td></tr>');
- html+='</tbody></table>';
- display.innerHTML=html; checkFridayBTST(selectedDate);
+  const selectedDate = document.getElementById("search-date").value;
+  const display = document.getElementById("analytics-display");
+
+  // New database is occurrence-based, so a date matches when an occurrence
+  // starts OR is active through that date.
+  const rows = DB.filter(r =>
+    selectedDate >= String(r.start_date) &&
+    selectedDate <= String(r.end_date)
+  );
+
+  if(!rows.length){
+    display.innerHTML =
+      '<h3 style="color:#ff6666">⚠️ ' + esc(selectedDate) + ' का कोई नक्षत्र occurrence उपलब्ध नहीं है</h3>' +
+      '<p>नई database.js में केवल वास्तविक Excel से निकाले गए Nakshatra आरम्भ → अन्त records हैं।</p>';
+    checkFridayBTST(selectedDate);
+    return;
+  }
+
+  let html =
+    '<h2 style="color:var(--gold)">📅 ' + esc(selectedDate) +
+    ' — ' + currentAsset.toUpperCase() + ' सत्र विश्लेषण</h2>';
+
+  html +=
+    '<div class="card-grid">' +
+      '<div class="card"><small>ACTIVE RECORDS</small><b>' + rows.length + '</b></div>' +
+      '<div class="card"><small>ASSET</small><b>' + currentAsset.toUpperCase() + '</b></div>' +
+      '<div class="card"><small>DATABASE</small><b>2026–2030</b></div>' +
+      '<div class="card"><small>NAKSHATRAS</small><b>27</b></div>' +
+    '</div>';
+
+  html +=
+    '<table class="data-table">' +
+    '<thead><tr>' +
+    '<th>नक्षत्र</th><th>आरम्भ दिनांक</th><th>आरम्भ समय IST</th>' +
+    '<th>अन्त दिनांक</th><th>अन्त समय IST</th><th>स्थिति</th>' +
+    '</tr></thead><tbody>';
+
+  rows.forEach(r => {
+    html += '<tr>' +
+      '<td>' + esc(r.nak) + '</td>' +
+      '<td>' + esc(r.start_date) + '</td>' +
+      '<td>' + esc(r.start_time_ist) + '</td>' +
+      '<td>' + esc(r.end_date) + '</td>' +
+      '<td>' + esc(r.end_time_ist) + '</td>' +
+      '<td>' + esc(r.state) + '</td>' +
+      '</tr>';
+  });
+
+  html += '</tbody></table>';
+  html += '<p style="color:var(--silver);margin-top:15px">डेटा स्रोत: Excel की 27 Nakshatra sheets → database.js</p>';
+
+  display.innerHTML = html;
+  checkFridayBTST(selectedDate);
 }
+
 function checkFridayBTST(dateString){
- const d=new Date(dateString+"T00:00:00").getDay(), zone=document.getElementById("btst-alert-zone");
- if(d===5) zone.innerHTML='🔥 <b>शुक्रवार वीकेंड प्रेडिक्शन:</b> यह शुक्रवार है। सोमवार ओपनिंग के लिए आपके उपलब्ध डेटाबेस रिकॉर्ड की जाँच करें।';
- else zone.innerHTML='🔮 <b>दैनिक सत्र अलर्ट:</b> '+dateString+' के उपलब्ध नक्षत्र रिकॉर्ड सफलतापूर्वक रेंडर किए गए।';
+  const d = new Date(dateString + "T00:00:00").getDay();
+  const zone = document.getElementById("btst-alert-zone");
+
+  if(d === 5){
+    zone.innerHTML =
+      '🔥 <b>शुक्रवार वीकेंड प्रेडिक्शन:</b> यह शुक्रवार है। ' +
+      'सोमवार ओपनिंग के लिए उपलब्ध नक्षत्र occurrence records देखें।';
+  } else {
+    zone.innerHTML =
+      '🔮 <b>दैनिक सत्र अलर्ट:</b> ' + esc(dateString) +
+      ' के उपलब्ध नक्षत्र occurrence records सफलतापूर्वक रेंडर किए गए।';
+  }
 }
-function renderIndependentFile(nak,item){
- document.querySelectorAll(".sidebar-item").forEach(x=>x.classList.remove("active"));
- if(item)item.classList.add("active");
- const rows=DB.filter(r=>r.nak===nak), display=document.getElementById("analytics-display");
- let html='<h2 style="color:var(--gold)">📂 स्वायत्त नक्षत्र फ़ाइल: '+esc(nak.toUpperCase())+'</h2>';
- html+='<p><b>कमोडिटी रेफरेंस:</b> '+currentAsset.toUpperCase()+' FUTURES · 5-वर्षीय सिंक</p>';
- if(!rows.length){html+='<p style="color:var(--silver)">इस नक्षत्र का कोई रिकॉर्ड वर्तमान database.js में उपलब्ध नहीं है।</p>';}
- else{
-  html+='<p><b>मिले रिकॉर्ड:</b> '+rows.length+'</p><table class="data-table"><thead><tr><th>दिनांक</th><th>समय</th><th>NY</th><th>TZ</th><th>स्थिति</th><th>डिग्री</th></tr></thead><tbody>';
-  rows.forEach(r=>html+='<tr><td>'+esc(r.date)+'</td><td>'+esc(r.time)+'</td><td>'+esc(r.ny)+'</td><td>'+esc(r.tz)+'</td><td>'+esc(r.state)+'</td><td>'+Number(r.deg).toFixed(4)+'</td></tr>');
-  html+='</tbody></table>';
- }
- display.innerHTML=html;
+
+function renderIndependentFile(nak, item){
+  document.querySelectorAll(".sidebar-item").forEach(x => x.classList.remove("active"));
+  if(item) item.classList.add("active");
+
+  const rows = DB.filter(r => r.nak === nak);
+  const display = document.getElementById("analytics-display");
+
+  let html =
+    '<h2 style="color:var(--gold)">📂 स्वायत्त नक्षत्र फ़ाइल: ' +
+    esc(nak.toUpperCase()) + '</h2>' +
+    '<p><b>कमोडिटी रेफरेंस:</b> ' + currentAsset.toUpperCase() +
+    ' FUTURES · 2026–2030</p>';
+
+  if(!rows.length){
+    html += '<p style="color:var(--silver)">इस नक्षत्र का कोई रिकॉर्ड उपलब्ध नहीं है।</p>';
+  } else {
+    html += '<p><b>कुल occurrences:</b> ' + rows.length + '</p>';
+    html +=
+      '<table class="data-table"><thead><tr>' +
+      '<th>आरम्भ</th><th>आरम्भ समय IST</th><th>अन्त</th>' +
+      '<th>अन्त समय IST</th><th>स्थिति</th>' +
+      '</tr></thead><tbody>';
+
+    rows.forEach(r => {
+      html += '<tr>' +
+        '<td>' + esc(r.start_date) + '</td>' +
+        '<td>' + esc(r.start_time_ist) + '</td>' +
+        '<td>' + esc(r.end_date) + '</td>' +
+        '<td>' + esc(r.end_time_ist) + '</td>' +
+        '<td>' + esc(r.state) + '</td>' +
+        '</tr>';
+    });
+
+    html += '</tbody></table>';
+  }
+
+  display.innerHTML = html;
 }
-function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+
+function esc(v){
+  return String(v ?? "").replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
+}
 </script>
 </body>
 </html>
